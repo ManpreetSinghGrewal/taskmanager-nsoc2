@@ -139,6 +139,117 @@ button:focus-visible {
   outline-offset: 3px;
 }
 
+/* Container for productivity statistics cards and completion bar. */
+.stats-dashboard {
+  margin-top: 20px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--panel);
+}
+
+/* Arrange the four metric cards in an equal-width grid. */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+/* Style each interactive metric counter card. */
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel-raised);
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  background: #393c47;
+}
+
+.stat-card.active-filter {
+  border-color: var(--accent);
+  background: rgba(162, 147, 255, 0.14);
+  box-shadow: 0 0 14px rgba(162, 147, 255, 0.22);
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.stat-label {
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Accentuate metric values with distinct status colors. */
+.stat-card[data-stat-filter="all"] .stat-value {
+  color: var(--accent);
+}
+
+.stat-card[data-stat-filter="active"] .stat-value {
+  color: #ffd447;
+}
+
+.stat-card[data-stat-filter="done"] .stat-value {
+  color: #4ade80;
+}
+
+.stat-card[data-stat-filter="overdue-task"] .stat-value {
+  color: var(--danger);
+}
+
+/* Progress bar container and typography. */
+.progress-container {
+  margin-top: 14px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 7px;
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--muted);
+}
+
+.progress-percent {
+  color: var(--accent);
+  font-weight: 750;
+}
+
+.progress-bar-bg {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--field);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), #4ade80);
+  transition: width 350ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* Arrange the All, Active, and Done filter buttons. */
 #filters {
   display: flex;
@@ -351,6 +462,22 @@ button:focus-visible {
   min-height: 12px;
 }
 
+/* Empty state placeholder when no tasks match current filter. */
+#todo-list li.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 68px;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  background: rgba(43, 45, 53, 0.45);
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 550;
+  text-align: center;
+  cursor: default;
+}
+
 /* Stack the form controls on narrow phone screens. */
 @media (max-width: 680px) {
   body {
@@ -371,6 +498,10 @@ button:focus-visible {
 
   #todo-form button {
     grid-column: 1 / -1;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

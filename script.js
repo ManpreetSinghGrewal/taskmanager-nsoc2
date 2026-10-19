@@ -15,6 +15,16 @@ const weeklyChartCanvas = document.getElementById('weekly-chart');
 const previousMonthButton = document.getElementById('previous-month');
 const nextMonthButton = document.getElementById('next-month');
 
+// Stats and progress bar elements
+const statTotal = document.getElementById('stat-total');
+const statActive = document.getElementById('stat-active');
+const statCompleted = document.getElementById('stat-completed');
+const statOverdue = document.getElementById('stat-overdue');
+const progressPercent = document.getElementById('progress-percent');
+const progressBarFill = document.getElementById('progress-bar-fill');
+const progressBarWrapper = document.getElementById('progress-bar-wrapper');
+const statCards = document.querySelectorAll('.stat-card');
+
 // Application State
 let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 let priorityChart = null;
@@ -51,7 +61,7 @@ function isOverdue(task) {
 }
 
 /**
- * Updates UI active status for filter buttons.
+ * Updates UI active status for filter buttons and stat cards.
  */
 function updateActiveFilterUI(selectedFilter) {
     filterButtons.forEach(btn => {
@@ -61,6 +71,42 @@ function updateActiveFilterUI(selectedFilter) {
             btn.classList.remove('active');
         }
     });
+
+    statCards.forEach(card => {
+        if (card.dataset.statFilter === selectedFilter) {
+            card.classList.add('active-filter');
+        } else {
+            card.classList.remove('active-filter');
+        }
+    });
+}
+
+/**
+ * Calculates and updates productivity statistics and the completion progress bar.
+ */
+function updateDashboardStats() {
+    if (!statTotal || !statActive || !statCompleted || !statOverdue) return;
+
+    const total = tasks.length;
+    const active = tasks.filter(task => !task.completed).length;
+    const completed = tasks.filter(task => task.completed).length;
+    const overdue = tasks.filter(task => isOverdue(task)).length;
+    const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+    statTotal.textContent = total;
+    statActive.textContent = active;
+    statCompleted.textContent = completed;
+    statOverdue.textContent = overdue;
+
+    if (progressPercent) {
+        progressPercent.textContent = `${percent}%`;
+    }
+    if (progressBarFill) {
+        progressBarFill.style.width = `${percent}%`;
+    }
+    if (progressBarWrapper) {
+        progressBarWrapper.setAttribute('aria-valuenow', String(percent));
+    }
 }
 
 /**
@@ -78,6 +124,23 @@ function showTasks(filter = historyMode ? currentFilter : 'active') {
         if (filter === 'done') return task.completed;
         return true;
     });
+
+    if (visibleTasks.length === 0) {
+        const emptyState = document.createElement('li');
+        emptyState.className = 'empty-state';
+        let emptyMsg = 'No tasks found. Add a task above to get started!';
+        if (filter === 'active') {
+            emptyMsg = tasks.length === 0
+                ? 'No active tasks. Add a task above to get started!'
+                : '🎉 All caught up! All tasks are completed.';
+        } else if (filter === 'done') {
+            emptyMsg = 'No completed tasks yet. Finish a task to see it here!';
+        } else if (filter === 'overdue-task') {
+            emptyMsg = '✨ Excellent! No overdue tasks.';
+        }
+        emptyState.textContent = emptyMsg;
+        list.appendChild(emptyState);
+    }
 
     const tasksToRender = filter === 'all'
         ? groupTasksByMonth(visibleTasks)
@@ -196,6 +259,8 @@ function showTasks(filter = historyMode ? currentFilter : 'active') {
         drawPriorityChart();
         drawWeeklyChart();
     }
+
+    updateDashboardStats();
 }
 
 /**
@@ -256,6 +321,12 @@ form.addEventListener('submit', function(event) {
 filters.addEventListener('click', function(event) {
     if (event.target.tagName !== 'BUTTON') return;
     showTasks(event.target.dataset.filter);
+});
+
+statCards.forEach(function(card) {
+    card.addEventListener('click', function() {
+        showTasks(card.dataset.statFilter);
+    });
 });
 
 historyButton.addEventListener('click', function() {

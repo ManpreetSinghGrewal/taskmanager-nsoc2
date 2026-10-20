@@ -481,3 +481,62 @@ button:focus-visible {
     grid-template-columns: 1fr;
   }
 }
+
+/* Theme toggle btn */
+#theme-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1000;
+  padding: 9px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+#theme-toggle:hover {
+  border-color: var(--accent);
+}
+
+/* Light theme */
+body.light-mode {
+  --page: #f4f5f9;
+  --panel: #ffffff;
+  --panel-raised: #f0f1f6;
+  --field: #ffffff;
+  --text: #252735;
+  --muted: #666b7a;
+  --accent: #7865e8;
+  --accent-hover: #6854d6;
+  --danger: #d93648;
+  --danger-hover: #c52638;
+  --border: #d9dce6;
+  --shadow: 0 22px 65px rgba(0, 0, 0, 0.08);
+}
+
+/* Update backgrnd that use fixed dark color */
+body.light-mode {
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    #ffffff 0,
+    var(--page) 520px
+  );
+}
+
+body.light-mode > div {
+  background: rgba(255, 255, 255, 0.96);
+}
+
+body.light-mode #todo-form .history-button:hover {
+  background: #e5e2f5;
+  color: var(--text);
+}
+
+body.light-mode #todo-list li .delete-button:hover {
+  color: var(--danger);
+}

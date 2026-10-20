@@ -23,6 +23,37 @@ let chartMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 let historyMode = false;
 let currentFilter = 'active';
 let lastRenderDate = getTodayDate();
+// light-dark mode
+const themeToggle = document.getElementById('theme-toggle');
+function applyTheme(isLight) {
+    document.body.classList.toggle('light-mode', isLight);
+    themeToggle.textContent = isLight
+        ? '🌙 Dark Mode'
+        : '☀️ Light Mode';
+
+    themeToggle.setAttribute(
+        'aria-label',
+        isLight ? 'Switch to dark mode' : 'Switch to light mode'
+    );
+    themeToggle.setAttribute('aria-pressed', String(isLight));
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+
+   //chart labels-readable
+    Chart.defaults.color = isLight ? '#252735' : '#f3f4f8';
+    Chart.defaults.borderColor = isLight ? '#d9dce6' : '#454853';
+
+    //refresh chart-history open
+    if (historyMode) {
+        drawPriorityChart();
+        drawWeeklyChart();
+    }
+}
+applyTheme(localStorage.getItem('theme') === 'light');
+// Switch theme - button is clicked.
+themeToggle.addEventListener('click', function () {
+    const isLight = !document.body.classList.contains('light-mode');
+    applyTheme(isLight);
+});
 
 /**
  * Persists current task list to browser localStorage.

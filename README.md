@@ -213,6 +213,16 @@ Navigate to `http://localhost:8080` in your web browser.
 3. **No due date:** Using browser developer tools, set a stored task's `dueDate` to an empty string and reload. Confirm that it never receives an **Overdue** badge.
 4. **Date change while open:** Keep a task due today open past local midnight, or temporarily advance the system date by one day. Return to the tab and confirm that the badge appears within 60 seconds without reloading the page.
 
+### 💾 Stored Data Regression Checks
+
+Use browser developer tools to run each command, then reload the page:
+
+1. **Malformed JSON:** Run `localStorage.setItem('tasks', '{invalid')`. Confirm that the app loads without tasks or browser errors.
+2. **Unexpected storage value:** Run `localStorage.setItem('tasks', '{"text":"Not an array"}')`. Confirm that the value is ignored.
+3. **Missing required fields:** Run `localStorage.setItem('tasks', '[{"text":"Incomplete task"}]')`. Confirm that the incomplete record is not rendered.
+4. **Invalid field types:** Run `localStorage.setItem('tasks', '[{"text":"Invalid task","dueDate":null,"priority":"medium","completed":"false","completedAt":null}]')`. Confirm that the invalid record is not rendered.
+5. **Mixed valid and invalid records:** Run `localStorage.setItem('tasks', JSON.stringify([{ text: 'Keep this task', dueDate: '', priority: 'medium', completed: false, completedAt: null }, { text: 'Discard this task', dueDate: '', priority: 'medium', completed: 'false', completedAt: null }]))`. Confirm that only **Keep this task** is rendered and remains usable.
+
 ---
 
 ## 🗺️ Roadmap

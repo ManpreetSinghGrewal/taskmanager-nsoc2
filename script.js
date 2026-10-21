@@ -46,9 +46,7 @@ const priorityWeights = { high: 3, medium: 2, low: 1 };
 const themeToggle = document.getElementById('theme-toggle');
 function applyTheme(isLight) {
     document.body.classList.toggle('light-mode', isLight);
-    themeToggle.textContent = isLight
-        ? '🌙 Dark Mode'
-        : '☀️ Light Mode';
+    themeToggle.textContent = isLight ? 'Dark mode' : 'Light mode';
 
     themeToggle.setAttribute(
         'aria-label',
@@ -57,11 +55,11 @@ function applyTheme(isLight) {
     themeToggle.setAttribute('aria-pressed', String(isLight));
     localStorage.setItem('theme', isLight ? 'light' : 'dark');
 
-   //chart labels-readable
-    Chart.defaults.color = isLight ? '#252735' : '#f3f4f8';
-    Chart.defaults.borderColor = isLight ? '#d9dce6' : '#454853';
+    // Chart styling for readability
+    Chart.defaults.color = isLight ? '#0f172a' : '#f3f4f6';
+    Chart.defaults.borderColor = isLight ? '#e2e8f0' : '#262934';
 
-    //refresh chart-history open
+    // Refresh charts if history is open
     if (historyMode) {
         drawPriorityChart();
         drawWeeklyChart();

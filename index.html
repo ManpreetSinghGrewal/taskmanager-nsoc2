@@ -4,13 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Manager - Productivity Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <button id="theme-toggle" type="button" aria-label="Switch to light mode" aria-pressed="false">☀️ Light Mode</button>
-    <h1>MY TODO LIST</h1>
-    <div>
-        <form id="todo-form">
+    <div class="app-shell">
+        <header class="app-header">
+            <div class="brand">
+                <div class="brand-monogram" aria-hidden="true">&#10003;</div>
+                <div class="brand-text">
+                    <h1>Task Manager</h1>
+                    <p class="app-subtitle">Productivity Dashboard</p>
+                </div>
+            </div>
+            <button id="theme-toggle" class="theme-btn" type="button" aria-label="Switch to light mode" aria-pressed="false">Light mode</button>
+        </header>
+
+        <form id="todo-form" aria-label="Add new task">
             <input id="todo-input" type="text" placeholder="New Task..." required>
             <input id="todo-date" type="date" aria-label="Task due date">
             <select id="todo-priority" aria-label="Task priority">

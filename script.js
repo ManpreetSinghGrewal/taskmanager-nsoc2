@@ -56,8 +56,8 @@ function applyTheme(isLight) {
     localStorage.setItem('theme', isLight ? 'light' : 'dark');
 
     // Chart styling for readability
-    Chart.defaults.color = isLight ? '#0f172a' : '#f3f4f6';
-    Chart.defaults.borderColor = isLight ? '#e2e8f0' : '#262934';
+    Chart.defaults.color = isLight ? '#1d1d1f' : '#f5f5f7';
+    Chart.defaults.borderColor = isLight ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.12)';
 
     // Refresh charts if history is open
     if (historyMode) {
@@ -435,7 +435,15 @@ form.addEventListener('submit', function(event) {
     saveTasks();
     showTasks(historyMode ? currentFilter : 'active');
 
+    // Tactile button feedback on add
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn) {
+        submitBtn.classList.add('btn-pressed');
+        setTimeout(() => submitBtn.classList.remove('btn-pressed'), 180);
+    }
+
     input.value = '';
+    input.focus();
 });
 
 filters.addEventListener('click', function(event) {
@@ -517,6 +525,9 @@ function drawWeeklyChart() {
         }
     });
 
+    const isLight = document.body.classList.contains('light-mode');
+    const barColor = isLight ? '#0071e3' : '#0a84ff';
+
     weeklyChart = new Chart(weeklyChartCanvas, {
         type: 'bar',
         data: {
@@ -524,7 +535,8 @@ function drawWeeklyChart() {
             datasets: [{
                 label: `Tasks completed - ${monthName}`,
                 data: weeks,
-                backgroundColor: '#a293ff'
+                backgroundColor: barColor,
+                borderRadius: 4
             }]
         },
         options: {
@@ -546,13 +558,19 @@ function drawPriorityChart() {
     const medium = tasks.filter(task => task.priority === 'medium').length;
     const low = tasks.filter(task => task.priority === 'low').length;
 
+    const isLight = document.body.classList.contains('light-mode');
+    const colors = isLight
+        ? ['#ff3b30', '#ff9500', '#0071e3']
+        : ['#ff453a', '#ffd60a', '#0a84ff'];
+
     priorityChart = new Chart(priorityChartCanvas, {
-        type: 'pie',
+        type: 'doughnut',
         data: {
             labels: ['High', 'Medium', 'Low'],
             datasets: [{
                 data: [high, medium, low],
-                backgroundColor: ['#ff4d5e', '#ffd447', '#ff963d']
+                backgroundColor: colors,
+                borderWidth: 0
             }]
         },
         options: {

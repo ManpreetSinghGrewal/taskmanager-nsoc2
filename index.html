@@ -53,6 +53,26 @@
             </div>
         </section>
 
+        <div id="task-toolbar" class="task-toolbar" aria-label="Task search and sorting">
+            <div class="search-box">
+                <span class="search-icon" aria-hidden="true">&#128269;</span>
+                <input id="task-search" type="search" placeholder="Search tasks..." aria-label="Search tasks" autocomplete="off">
+                <button id="search-clear" type="button" class="search-clear" aria-label="Clear search" hidden>&times;</button>
+            </div>
+            <div class="sort-box">
+                <label for="task-sort" class="sort-label">Sort by:</label>
+                <select id="task-sort" aria-label="Sort tasks">
+                    <option value="default">Default</option>
+                    <option value="dueDate-asc">Due Date (Earliest)</option>
+                    <option value="dueDate-desc">Due Date (Latest)</option>
+                    <option value="priority-desc">Priority (High to Low)</option>
+                    <option value="priority-asc">Priority (Low to High)</option>
+                    <option value="alphabetical-asc">Title (A &rarr; Z)</option>
+                    <option value="alphabetical-desc">Title (Z &rarr; A)</option>
+                </select>
+            </div>
+        </div>
+
         <div id="filters" hidden>
             <button type="button" data-filter="all" class="filter-btn active">All</button>
             <button type="button" data-filter="active" class="filter-btn">Active</button>

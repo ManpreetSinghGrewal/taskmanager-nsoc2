@@ -101,6 +101,16 @@ Whether tracking daily sprint objectives, prioritizing critical deadlines, revie
       <p>All state is automatically synchronized with the browser's <code>localStorage</code> API. No database setup, no account creation, and zero latency.</p>
     </td>
   </tr>
+  <tr>
+    <td width="50%">
+      <h3>🔍 Real-Time Task Search</h3>
+      <p>Filter active or historical tasks by keyword with instant live matching and one-click clear button.</p>
+    </td>
+    <td width="50%">
+      <h3>🔀 Multi-Criteria Sorting</h3>
+      <p>Sort tasks dynamically by due date (earliest or latest), priority level (high to low or low to high), or alphabetically.</p>
+    </td>
+  </tr>
 </table>
 
 ---

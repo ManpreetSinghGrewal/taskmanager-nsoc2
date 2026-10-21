@@ -25,6 +25,11 @@ const progressBarFill = document.getElementById('progress-bar-fill');
 const progressBarWrapper = document.getElementById('progress-bar-wrapper');
 const statCards = document.querySelectorAll('.stat-card');
 
+// Task Search and Sort elements
+const searchInput = document.getElementById('task-search');
+const searchClearButton = document.getElementById('search-clear');
+const sortSelect = document.getElementById('task-sort');
+
 // Application State
 let tasks = loadTasks();
 let priorityChart = null;
@@ -32,7 +37,11 @@ let weeklyChart = null;
 let chartMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 let historyMode = false;
 let currentFilter = 'active';
+let searchQuery = '';
+let currentSort = 'default';
 let lastRenderDate = getTodayDate();
+
+const priorityWeights = { high: 3, medium: 2, low: 1 };
 // light-dark mode
 const themeToggle = document.getElementById('theme-toggle');
 function applyTheme(isLight) {
@@ -171,6 +180,48 @@ function updateDashboardStats() {
 }
 
 /**
+ * Sorts an array of tasks based on the given sort criteria without mutating the original array.
+ */
+function sortTasks(taskList, sortOption = currentSort) {
+    const listCopy = [...taskList];
+    if (sortOption === 'default') {
+        return listCopy;
+    }
+
+    return listCopy.sort((a, b) => {
+        if (sortOption === 'dueDate-asc') {
+            if (!a.dueDate && !b.dueDate) return 0;
+            if (!a.dueDate) return 1;
+            if (!b.dueDate) return -1;
+            return a.dueDate.localeCompare(b.dueDate);
+        }
+        if (sortOption === 'dueDate-desc') {
+            if (!a.dueDate && !b.dueDate) return 0;
+            if (!a.dueDate) return 1;
+            if (!b.dueDate) return -1;
+            return b.dueDate.localeCompare(a.dueDate);
+        }
+        if (sortOption === 'priority-desc') {
+            const weightA = priorityWeights[a.priority] || 0;
+            const weightB = priorityWeights[b.priority] || 0;
+            return weightB - weightA;
+        }
+        if (sortOption === 'priority-asc') {
+            const weightA = priorityWeights[a.priority] || 0;
+            const weightB = priorityWeights[b.priority] || 0;
+            return weightA - weightB;
+        }
+        if (sortOption === 'alphabetical-asc') {
+            return a.text.localeCompare(b.text, undefined, { sensitivity: 'base' });
+        }
+        if (sortOption === 'alphabetical-desc') {
+            return b.text.localeCompare(a.text, undefined, { sensitivity: 'base' });
+        }
+        return 0;
+    });
+}
+
+/**
  * Renders task list based on active mode and filter.
  */
 function showTasks(filter = historyMode ? currentFilter : 'active') {
@@ -184,13 +235,18 @@ function showTasks(filter = historyMode ? currentFilter : 'active') {
         if (filter === 'overdue-task') return isOverdue(task);
         if (filter === 'done') return task.completed;
         return true;
+    }).filter(function(task) {
+        if (!searchQuery) return true;
+        return task.text.toLowerCase().includes(searchQuery.toLowerCase());
     });
 
     if (visibleTasks.length === 0) {
         const emptyState = document.createElement('li');
         emptyState.className = 'empty-state';
         let emptyMsg = 'No tasks found. Add a task above to get started!';
-        if (filter === 'active') {
+        if (searchQuery) {
+            emptyMsg = `🔍 No tasks found matching "${searchQuery}".`;
+        } else if (filter === 'active') {
             emptyMsg = tasks.length === 0
                 ? 'No active tasks. Add a task above to get started!'
                 : '🎉 All caught up! All tasks are completed.';
@@ -203,9 +259,11 @@ function showTasks(filter = historyMode ? currentFilter : 'active') {
         list.appendChild(emptyState);
     }
 
+    const sortedVisibleTasks = sortTasks(visibleTasks, currentSort);
+
     const tasksToRender = filter === 'all'
-        ? groupTasksByMonth(visibleTasks)
-        : [{ monthLabel: '', tasks: visibleTasks }];
+        ? groupTasksByMonth(sortedVisibleTasks)
+        : [{ monthLabel: '', tasks: sortedVisibleTasks }];
 
     tasksToRender.forEach(function(group) {
         if (group.monthLabel) {
@@ -346,7 +404,10 @@ function groupTasksByMonth(taskList) {
 
     return Array.from(groups.entries())
         .sort((a, b) => a[0].localeCompare(b[0]))
-        .map(entry => entry[1]);
+        .map(entry => ({
+            monthLabel: entry[1].monthLabel,
+            tasks: sortTasks(entry[1].tasks, currentSort)
+        }));
 }
 
 /**
@@ -389,6 +450,33 @@ statCards.forEach(function(card) {
         showTasks(card.dataset.statFilter);
     });
 });
+
+if (searchInput) {
+    searchInput.addEventListener('input', function() {
+        searchQuery = searchInput.value.trim();
+        if (searchClearButton) {
+            searchClearButton.hidden = searchInput.value === '';
+        }
+        showTasks(historyMode ? currentFilter : 'active');
+    });
+}
+
+if (searchClearButton) {
+    searchClearButton.addEventListener('click', function() {
+        searchInput.value = '';
+        searchQuery = '';
+        searchClearButton.hidden = true;
+        searchInput.focus();
+        showTasks(historyMode ? currentFilter : 'active');
+    });
+}
+
+if (sortSelect) {
+    sortSelect.addEventListener('change', function() {
+        currentSort = sortSelect.value;
+        showTasks(historyMode ? currentFilter : 'active');
+    });
+}
 
 historyButton.addEventListener('click', function() {
     historyMode = !historyMode;

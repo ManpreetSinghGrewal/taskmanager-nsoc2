@@ -250,6 +250,123 @@ button:focus-visible {
   transition: width 350ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Toolbar container for search and sorting */
+.task-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel);
+}
+
+/* Search input container */
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.search-icon {
+  position: absolute;
+  left: 11px;
+  font-size: 13px;
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+#task-search {
+  width: 100%;
+  height: 38px;
+  padding: 0 32px 0 34px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--field);
+  color: var(--text);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+#task-search::placeholder {
+  color: #898e9b;
+}
+
+#task-search:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(162, 147, 255, 0.15);
+}
+
+#task-search::-webkit-search-decoration,
+#task-search::-webkit-search-cancel-button,
+#task-search::-webkit-search-results-button,
+#task-search::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+}
+
+.search-clear {
+  position: absolute;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 150ms ease, color 150ms ease;
+}
+
+.search-clear:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--text);
+}
+
+/* Sorting select container */
+.sort-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.sort-label {
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+#task-sort {
+  height: 38px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--field);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 550;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+#task-sort:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(162, 147, 255, 0.15);
+}
+
 /* Arrange the All, Active, and Done filter buttons. */
 #filters {
   display: flex;
@@ -503,6 +620,20 @@ button:focus-visible {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .task-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .sort-box {
+    justify-content: space-between;
+  }
+
+  #task-sort {
+    flex: 1;
+  }
 }
 
 /* Reduce animation for people who prefer less motion. */
@@ -670,4 +801,12 @@ body.light-mode #todo-form .history-button:hover {
 
 body.light-mode #todo-list li .delete-button:hover {
   color: var(--danger);
+}
+
+body.light-mode .search-clear {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+body.light-mode .search-clear:hover {
+  background: rgba(0, 0, 0, 0.16);
 }

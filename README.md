@@ -233,6 +233,14 @@ Use browser developer tools to run each command, then reload the page:
 4. **Invalid field types:** Run `localStorage.setItem('tasks', '[{"text":"Invalid task","dueDate":null,"priority":"medium","completed":"false","completedAt":null}]')`. Confirm that the invalid record is not rendered.
 5. **Mixed valid and invalid records:** Run `localStorage.setItem('tasks', JSON.stringify([{ text: 'Keep this task', dueDate: '', priority: 'medium', completed: false, completedAt: null }, { text: 'Discard this task', dueDate: '', priority: 'medium', completed: 'false', completedAt: null }]))`. Confirm that only **Keep this task** is rendered and remains usable.
 
+### 🔍 Search & Sorting Regression Checks
+
+1. **Live Search Filtering:** Type a keyword into the search bar. Confirm that only matching tasks appear, and the clear (`×`) button is visible.
+2. **Empty Search Result:** Search for a non-existent task name. Confirm that the custom empty state message (`🔍 No tasks found matching "..."`) is displayed.
+3. **One-Click Clear:** Click the `×` button. Confirm that the search input is cleared, the clear button hides, and the full task list is restored.
+4. **Sorting Verification:** Select each sort option (`Due Date`, `Priority`, `Title A-Z/Z-A`) and confirm that items re-order instantly without altering task state or persistence.
+5. **Combined Filter & Sort:** Apply a filter (e.g., `Done` or `Active`) or switch to History mode and confirm that search and sort accurately scope to that view.
+
 ---
 
 ## 🗺️ Roadmap
@@ -243,7 +251,8 @@ Exciting features planned for future releases:
 - [ ] 🏷️ **Custom Tags & Categories**: Multi-label tagging with custom color badges.
 - [ ] 📥 **Data Import / Export**: One-click JSON / CSV backup and restore.
 - [ ] 📋 **Subtasks & Nested Checklists**: Granular sub-item progress tracking.
-- [ ] ☀️ **Dark / Light Theme Switcher**: Dynamic theme toggle with persistent preference.
+- [x] 🔍 **Task Search & Multi-Criteria Sorting**: Live search by keyword and dynamic sorting by date, priority, or title.
+- [x] ☀️ **Dark / Light Theme Switcher**: Dynamic theme toggle with persistent preference.
 - [ ] 📱 **Progressive Web App (PWA)**: Offline service workers and mobile app installability.
 
 ---

@@ -181,40 +181,23 @@ taskmanager/
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick Start (React + Vite)
 
-You can run this project locally in seconds without installing Node.js or any package manager!
-
-### Option 1: Direct Browser Launch (Fastest)
-
-1. **Clone the repository:**
+1. **Install dependencies:**
    ```bash
-   git clone https://github.com/qwerty274/taskmanager-nsoc2.git
-   cd taskmanager-nsoc2
+   npm install
    ```
-2. **Open `index.html`:**
-   - Double-click `index.html` in your file explorer, or
-   - Drag and drop `index.html` directly into Chrome, Firefox, Edge, or Safari.
 
-### Option 2: VS Code Live Server
-
-1. Open the project folder in **Visual Studio Code**:
+2. **Start the development server:**
    ```bash
-   code .
+   npm run dev
    ```
-2. Install the **Live Server** extension (if not already installed).
-3. Right-click [`index.html`](index.html) and select **"Open with Live Server"** or click **"Go Live"** in the status bar.
+   Navigate to `http://localhost:8080` in your web browser.
 
-### Option 3: Local HTTP Server
-
-```bash
-# Using Python 3:
-python -m http.server 8080
-
-# Or using Node npx:
-npx serve .
-```
-Navigate to `http://localhost:8080` in your web browser.
+3. **Build for production:**
+   ```bash
+   npm run build
+   ```
 
 ### 📅 Overdue Date Regression Checks
 
